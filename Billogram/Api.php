@@ -109,6 +109,12 @@ class Api
                 'server error');
         }
 
+        if ($response->statusCode == 401) {
+            throw new InvalidAuthenticationError('The user/key ' .
+                'combination is wrong, check the credentials used and ' .
+                'possibly generate a new set');
+        }
+        
         if ($response->headers['content-type'] != $expectContentType) {
             if ($response->headers['content-type'] == 'application/json') {
                 $data = json_decode($response->content);
