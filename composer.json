@@ -1,0 +1,19 @@
+{
+    "name": "billogram/billogram_api",
+    "type": "library",
+    "description": "Library for connecting to the Billogram v2 API",
+    "keywords": ["api"],
+    "homepage": "https://billogram.com/api/documentation",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Billogram AB",
+            "email": "integration@billogram.com",
+            "homepage": "https://billogram.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    }
+}
