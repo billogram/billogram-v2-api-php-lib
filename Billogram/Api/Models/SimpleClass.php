@@ -36,6 +36,7 @@ use Billogram\Api\Query;
  *
  * See the online documentation for the actual structure of remote objects.
  *
+ * @property \Billogram\Api $api
  **/
 class SimpleClass
 {
@@ -58,6 +59,7 @@ class SimpleClass
     /**
      * Create a query for objects of this type.
      *
+     * @return \Billogram\Api\Query
      **/
     public function query()
     {
@@ -67,7 +69,7 @@ class SimpleClass
     /**
      * Finds an object by id $objectId and returns an object.
      *
-     * @return void
+     * @return \Billogram\Api\Objects\SimpleObject
      **/
     public function get($objectId)
     {
@@ -80,7 +82,7 @@ class SimpleClass
     /**
      * Makes a POST request to the API and creates a new object.
      *
-     * @return void
+     * @return \Billogram\Api\Objects\SimpleObject
      **/
     public function create($data)
     {
@@ -93,6 +95,7 @@ class SimpleClass
     /**
      * Formats and returns a URL to an object or object id.
      *
+     * @return string
      **/
     public function url($object = null)
     {

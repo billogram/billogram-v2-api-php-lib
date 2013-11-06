@@ -94,7 +94,6 @@ class BillogramObject extends SimpleObject
     /**
      * Creates a credit invoice for the remaining amount of the billogram.
      *
-     * @return void
      **/
     public function creditRemaining()
     {
@@ -181,7 +180,7 @@ class BillogramObject extends SimpleObject
      * or letter document. Will throw a ObjectNotFoundError with message
      * 'Object not available yet' if the PDF has not yet been generated.
      *
-     * @throws Billogram\Api\Exceptions\ObjectNotFoundError
+     * @throws \Billogram\Api\Exceptions\ObjectNotFoundError
      **/
     public function getInvoicePdf($letterId = null, $invoiceNo = null)
     {

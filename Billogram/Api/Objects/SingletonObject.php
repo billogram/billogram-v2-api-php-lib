@@ -43,6 +43,8 @@ use Billogram\Api\Exceptions\UnknownFieldError;
  *
  * See the online documentation for the actual structure of remote objects.
  *
+ * @property \Billogram\Api $api
+ * @property \Billogram\Api\Models\SimpleClass $objectClass
  **/
 class SingletonObject
 {

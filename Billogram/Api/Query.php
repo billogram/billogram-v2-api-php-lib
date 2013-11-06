@@ -39,6 +39,8 @@ namespace Billogram\Api;
  * The exact fields and special queries available for each object type varies,
  * see the online documentation for details.
  *
+ * @property \Billogram\Api $api
+ * @property \Billogram\Api\Models\SimpleClass $typeClass
  **/
 class Query
 {

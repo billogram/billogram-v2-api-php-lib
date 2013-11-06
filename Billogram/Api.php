@@ -52,19 +52,21 @@ use Billogram\Api\Exceptions\RequestDataError;
 class Api
 {
     const API_URL_BASE = "https://billogram.com/api/v2";
-    const USER_AGENT = "Billogram API PHP Library/1.00";
+    const USER_AGENT = "Billogram API PHP Library/1.01";
 
     private $authUser;
     private $authKey;
     private $apiBase;
     private $userAgent;
+    private $extraHeaders;
 
-    private $items;
-    private $customers;
-    private $billogram;
-    private $settings;
-    private $logotype;
-    private $reports;
+    private $itemsConnector;
+    private $customersConnector;
+    private $billogramConnector;
+    private $settingsConnector;
+    private $logotypeConnector;
+    private $reportsConnector;
+    private $creditorsConnector;
 
     /**
      * Create a Billogram API connection object
@@ -76,7 +78,8 @@ class Api
         $authUser,
         $authKey,
         $userAgent = self::USER_AGENT,
-        $apiBase = self::API_URL_BASE
+        $apiBase = self::API_URL_BASE,
+        $extraHeaders = array()
     ) {
         $this->authUser = $authUser;
         $this->authKey = $authKey;
@@ -85,11 +88,15 @@ class Api
             $this->userAgent = $userAgent;
         else
             $this->userAgent = self::USER_AGENT;
+        if (!$extraHeaders)
+            $this->extraHeaders = array();
+        else
+            $this->extraHeaders = $extraHeaders;
     }
 
     /**
-     * Checks the response ($response as a response-objcet from httpRequest)
-     * from the API and throws the apprioate exceptions or returns the
+     * Checks the response ($response as a response-object from httpRequest)
+     * from the API and throws the appropriate exceptions or returns the
      * de-encoded data.
      *
      **/
@@ -100,11 +107,12 @@ class Api
 
         if ($response->statusCode >= 500 && $response->statusCode <= 600) {
             if ($response->headers['content-type'] == $expectContentType &&
-                $expectContentType == 'application/json')
+                $expectContentType == 'application/json') {
                 $data = json_decode($response->content);
                 throw new ServiceMalfunctioningError('Billogram API reported ' .
                     'a server error: ' . $data->status . ' - ' .
                     $data->data->message);
+            }
             throw new ServiceMalfunctioningError('Billogram API reported a ' .
                 'server error');
         }
@@ -184,8 +192,6 @@ class Api
             throw new InvalidObjectStateError($message);
         else
             throw new RequestDataError($message);
-
-        return $data;
     }
 
     /**
@@ -209,6 +215,9 @@ class Api
             )
         );
         foreach ($sendHeaders as $header => $value) {
+            $streamParams['http']['header'] .= $header . ': ' . $value . "\r\n";
+        }
+        foreach ($this->extraHeaders as $header => $value) {
             $streamParams['http']['header'] .= $header . ': ' . $value . "\r\n";
         }
 
@@ -350,43 +359,52 @@ class Api
     {
         switch ($key) {
             case 'items':
-                if (!$this->items)
-                    $this->items = new SimpleClass($this, 'item', 'item_no');
+                if (!$this->itemsConnector)
+                    $this->itemsConnector = new SimpleClass($this, 'item', 'item_no');
 
-                return $this->items;
+                return $this->itemsConnector;
             case 'customers':
-                if (!$this->customers)
-                    $this->customers = new SimpleClass(
+                if (!$this->customersConnector)
+                    $this->customersConnector = new SimpleClass(
                         $this,
                         'customer',
                         'customer_no'
                     );
 
-                return $this->customers;
+                return $this->customersConnector;
             case 'billogram':
-                if (!$this->billogram)
-                    $this->billogram = new BillogramClass($this);
+                if (!$this->billogramConnector)
+                    $this->billogramConnector = new BillogramClass($this);
 
-                return $this->billogram;
+                return $this->billogramConnector;
             case 'settings':
-                if (!$this->settings)
-                    $this->settings = new SingletonObject($this, 'settings');
+                if (!$this->settingsConnector)
+                    $this->settingsConnector = new SingletonObject($this, 'settings');
 
-                return $this->settings;
+                return $this->settingsConnector;
             case 'logotype':
-                if (!$this->logotype)
-                    $this->logotype = new SingletonObject($this, 'logotype');
+                if (!$this->logotypeConnector)
+                    $this->logotypeConnector = new SingletonObject($this, 'logotype');
 
-                return $this->logotype;
+                return $this->logotypeConnector;
             case 'reports':
-                if (!$this->reports)
-                    $this->reports = new SimpleClass(
+                if (!$this->reportsConnector)
+                    $this->reportsConnector = new SimpleClass(
                         $this,
                         'report',
                         'filename'
                     );
 
-                return $this->reports;
+                return $this->reportsConnector;
+            case 'creditors':
+                if (!$this->creditorsConnector)
+                    $this->creditorsConnector = new SimpleClass(
+                        $this,
+                        'creditor',
+                        'id'
+                    );
+
+                return $this->creditorsConnector;
             default:
                 throw new UnknownFieldError("Invalid parameter: " . $key);
         }

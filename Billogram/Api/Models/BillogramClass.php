@@ -54,8 +54,19 @@ class BillogramClass extends SimpleClass
     }
 
     /**
+     * Makes a POST request to the API and creates a new object.
+     *
+     * @return \Billogram\Api\Objects\BillogramObject
+     **/
+    public function create($data)
+    {
+        return parent::create($data);
+    }
+
+    /**
      * Creates and sends a billogram using the $data and $method supplied.
      *
+     * @return \Billogram\Api\Objects\BillogramObject
      **/
     public function createAndSend($data, $method)
     {
@@ -75,6 +86,7 @@ class BillogramClass extends SimpleClass
     /**
      * Creates and sells a billogram.
      *
+     * @return \Billogram\Api\Objects\BillogramObject
      **/
     public function createAndSell($data, $method)
     {

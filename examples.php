@@ -99,6 +99,7 @@ echo 'Billogram "' . $billogramObject->id .
    already be sent out to the customer (via Letter, or Email). */
 echo 'Waiting for PDF to be generated, this may take a few seconds.' . "\n";
 do {
+    $pdfContent = '';
     try {
         $pdfContent = $billogramObject->getInvoicePdf();
         break;
