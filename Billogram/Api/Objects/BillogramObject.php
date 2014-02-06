@@ -198,4 +198,31 @@ class BillogramObject extends SimpleObject
 
         return base64_decode($response->data->content);
     }
+
+    /**
+     * Returns the PDF-file content for the billogram's attachment.
+     *
+     **/
+    public function getAttachmentPdf()
+    {
+        $response = $this->api->get(
+            $this->url() . '/attachment.pdf',
+            null,
+            'application/json'
+        );
+
+        return base64_decode($response->data->content);
+    }
+
+    /**
+     * Attach a PDF to the billogram.
+     *
+     **/
+    public function attachPdf($filepath)
+    {
+        $content = file_get_contents($filepath);
+        $filename = basename($filepath);
+
+        return $this->performEvent('attach', array('filename' => $filename, 'content' => base64_encode('asdf')));
+    }
 }
