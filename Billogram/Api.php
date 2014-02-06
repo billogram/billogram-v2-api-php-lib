@@ -231,6 +231,8 @@ class Api
                 $streamParams['http']['content'] = $data;
         }
 
+        $streamParams['cURL'] = $streamParams['http'];
+
         $context = stream_context_create($streamParams);
         $fp = @fopen($url, 'rb', false, $context);
         if (!$fp)
@@ -244,7 +246,11 @@ class Api
 
         if ($content !== false) {
             $metadata = stream_get_meta_data($fp);
-            foreach ($metadata['wrapper_data'] as $row) {
+            if (isset($metadata['wrapper_data']['headers']))
+                $headerMetadata = $metadata['wrapper_data']['headers'];
+            else
+                $headerMetadata = $metadata['wrapper_data'];
+            foreach ($headerMetadata as $row) {
                 if (preg_match('/^HTTP\/1\.[01] (\d{3})\s*(.*)/', $row, $m)) {
                     $statusCode = $m[1];
                     $status = $m[2];
