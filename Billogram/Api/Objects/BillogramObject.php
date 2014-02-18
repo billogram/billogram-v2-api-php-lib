@@ -223,6 +223,6 @@ class BillogramObject extends SimpleObject
         $content = file_get_contents($filepath);
         $filename = basename($filepath);
 
-        return $this->performEvent('attach', array('filename' => $filename, 'content' => base64_encode('asdf')));
+        return $this->performEvent('attach', array('filename' => $filename, 'content' => base64_encode($content)));
     }
 }
