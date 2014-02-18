@@ -52,7 +52,7 @@ use Billogram\Api\Exceptions\RequestDataError;
 class Api
 {
     const API_URL_BASE = "https://billogram.com/api/v2";
-    const USER_AGENT = "Billogram API PHP Library/1.01";
+    const USER_AGENT = "Billogram API PHP Library/1.11";
 
     private $authUser;
     private $authKey;
