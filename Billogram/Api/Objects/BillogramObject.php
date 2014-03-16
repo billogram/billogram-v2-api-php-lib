@@ -23,7 +23,7 @@
  * @package Billogram_Api
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  * @author Billogram AB
- **/
+ */
 
 namespace Billogram\Api\Objects;
 
@@ -38,13 +38,13 @@ use Billogram\Api\Exceptions\InvalidFieldValueError;
  *
  * See the online documentation for the actual structure of billogram objects.
  *
- **/
+ */
 class BillogramObject extends SimpleObject
 {
     /**
      * Makes a POST request to /billogram/{id}/command/{event}.
      *
-     **/
+     */
     public function performEvent($eventName, $eventData = null)
     {
         $url = $this->url() . '/command/' . $eventName;
@@ -57,7 +57,7 @@ class BillogramObject extends SimpleObject
     /**
      * Stores a manual payment for the billogram.
      *
-     **/
+     */
     public function createPayment($amount)
     {
         return $this->performEvent('payment', array('amount' => $amount));
@@ -66,7 +66,7 @@ class BillogramObject extends SimpleObject
     /**
      * Creates a credit invoice for the specific amount.
      *
-     **/
+     */
     public function creditAmount($amount)
     {
         if (!is_numeric($amount) || $amount <= 0)
@@ -85,7 +85,7 @@ class BillogramObject extends SimpleObject
     /**
      * Creates a credit invoice for the full total amount of the billogram.
      *
-     **/
+     */
     public function creditFull()
     {
         return $this->performEvent('credit', array('mode' => 'full'));
@@ -94,7 +94,7 @@ class BillogramObject extends SimpleObject
     /**
      * Creates a credit invoice for the remaining amount of the billogram.
      *
-     **/
+     */
     public function creditRemaining()
     {
         return $this->performEvent('credit', array('mode' => 'remaining'));
@@ -103,7 +103,7 @@ class BillogramObject extends SimpleObject
     /**
      * Writes a comment/message at the billogram.
      *
-     **/
+     */
     public function sendMessage($message)
     {
         return $this->performEvent('message', array('message' => $message));
@@ -112,7 +112,7 @@ class BillogramObject extends SimpleObject
     /**
      * Sends the billogram for collection. Requires a collectors-agreement.
      *
-     **/
+     */
     public function sendToCollector()
     {
         return $this->performEvent('collect');
@@ -122,7 +122,7 @@ class BillogramObject extends SimpleObject
      * Sends to billogram to factoring (sell the billogram). Requires a
      * factoring-agreement.
      *
-     **/
+     */
     public function sendToFactoring()
     {
         return $this->performEvent('sell');
@@ -131,7 +131,7 @@ class BillogramObject extends SimpleObject
     /**
      * Manually send a reminder if the billogram is overdue.
      *
-     **/
+     */
     public function sendReminder($method = null)
     {
         if ($method) {
@@ -148,7 +148,7 @@ class BillogramObject extends SimpleObject
     /**
      * Send an unsent billogram using the method of choice.
      *
-     **/
+     */
     public function send($method)
     {
         if (!in_array($method, array('Email', 'Letter', 'Email+Letter')))
@@ -161,7 +161,7 @@ class BillogramObject extends SimpleObject
     /**
      * Resend a billogram via Email or Letter.
      *
-     **/
+     */
     public function resend($method = null)
     {
         if ($method) {
@@ -181,7 +181,7 @@ class BillogramObject extends SimpleObject
      * 'Object not available yet' if the PDF has not yet been generated.
      *
      * @throws \Billogram\Api\Exceptions\ObjectNotFoundError
-     **/
+     */
     public function getInvoicePdf($letterId = null, $invoiceNo = null)
     {
         $params = array();
@@ -202,7 +202,7 @@ class BillogramObject extends SimpleObject
     /**
      * Returns the PDF-file content for the billogram's attachment.
      *
-     **/
+     */
     public function getAttachmentPdf()
     {
         $response = $this->api->get(
@@ -217,7 +217,7 @@ class BillogramObject extends SimpleObject
     /**
      * Attach a PDF to the billogram.
      *
-     **/
+     */
     public function attachPdf($filepath)
     {
         $content = file_get_contents($filepath);

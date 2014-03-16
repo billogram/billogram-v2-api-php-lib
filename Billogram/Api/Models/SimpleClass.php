@@ -23,7 +23,7 @@
  * @package Billogram_Api
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  * @author Billogram AB
- **/
+ */
 
 namespace Billogram\Api\Models;
 
@@ -37,7 +37,7 @@ use Billogram\Api\Query;
  * See the online documentation for the actual structure of remote objects.
  *
  * @property \Billogram\Api $api
- **/
+ */
 class SimpleClass
 {
     public $objectClass = 'Billogram\Api\Objects\SimpleObject';
@@ -48,7 +48,7 @@ class SimpleClass
     /**
      * Constructor sets the base url and significant id field for the resource.
      *
-     **/
+     */
     public function __construct($api, $urlName, $objectIdField)
     {
         $this->api = $api;
@@ -60,7 +60,7 @@ class SimpleClass
      * Create a query for objects of this type.
      *
      * @return \Billogram\Api\Query
-     **/
+     */
     public function query()
     {
         return new Query($this->api, $this);

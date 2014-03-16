@@ -23,7 +23,7 @@
  * @package Billogram_Api
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  * @author Billogram AB
- **/
+ */
 
 namespace Billogram\Api\Objects;
 
@@ -45,7 +45,7 @@ use Billogram\Api\Exceptions\UnknownFieldError;
  *
  * @property \Billogram\Api $api
  * @property \Billogram\Api\Models\SimpleClass $objectClass
- **/
+ */
 class SingletonObject
 {
     protected $objectClass = null;
@@ -56,7 +56,7 @@ class SingletonObject
     /**
      * Constructor sets a url endpoint for the resource
      *
-     **/
+     */
     public function __construct($api, $urlName)
     {
         $this->api = $api;
@@ -66,7 +66,7 @@ class SingletonObject
     /**
      * String representation of the object
      *
-     **/
+     */
     public function __toString()
     {
         return "<Billogram object '" . $this->url() . "'" . ($this->data === null ? " (lazy)" : "") . ">";
@@ -75,7 +75,7 @@ class SingletonObject
     /**
      * Returns the API url where you can receive this object.
      *
-     **/
+     */
     public function url()
     {
         if ($this->urlName)
@@ -88,7 +88,7 @@ class SingletonObject
     /**
      * Makes a GET request and refreshes the local data with up-to-date info.
      *
-     **/
+     */
     public function refresh()
     {
         $response = $this->api->get($this->url());
@@ -100,7 +100,7 @@ class SingletonObject
     /**
      * Updates the API object with $data.
      *
-     **/
+     */
     public function update($data)
     {
         $response = $this->api->put($this->url(), $data);
@@ -112,7 +112,7 @@ class SingletonObject
     /**
      * Wrapper method to easier access the specific parameters
      *
-     **/
+     */
     public function __get($key)
     {
         switch ($key) {

@@ -23,7 +23,7 @@
  * @package Billogram_Api
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  * @author Billogram AB
- **/
+ */
 
 namespace Billogram\Api\Models;
 
@@ -37,7 +37,7 @@ use Billogram\Api\Exceptions\InvalidFieldValueError;
  * specialized creation methods to create billogram objects and state transition them
  * immediately.
  *
- **/
+ */
 class BillogramClass extends SimpleClass
 {
     public $objectClass = 'Billogram\Api\Objects\BillogramObject';
@@ -45,7 +45,7 @@ class BillogramClass extends SimpleClass
     /**
      * Constructor sets the base url and significant id field for the resource.
      *
-     **/
+     */
     public function __construct($api)
     {
         $this->api = $api;

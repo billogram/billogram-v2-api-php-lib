@@ -23,7 +23,7 @@
  * @package Billogram_Api
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  * @author Billogram AB
- **/
+ */
 
 namespace Billogram\Api;
 
@@ -41,7 +41,7 @@ namespace Billogram\Api;
  *
  * @property \Billogram\Api $api
  * @property \Billogram\Api\Models\SimpleClass $typeClass
- **/
+ */
 class Query
 {
     private $typeClass;
@@ -55,7 +55,7 @@ class Query
      * Initiated with the Billogram API object and the parent model as
      * $typeClass.
      *
-     **/
+     */
     public function __construct($api, $typeClass)
     {
         $this->api = $api;
@@ -66,7 +66,7 @@ class Query
      * Makes a GET request to the API with parameters for page size,
      * page number, filtering and order values. Returns the API response.
      *
-     **/
+     */
     private function makeQuery($pageNumber = 1)
     {
         $params = array(
@@ -84,7 +84,7 @@ class Query
     /**
      * Sets which field to order on. $orderDirection can be 'asc' or 'desc'.
      *
-     **/
+     */
     public function order($orderField, $orderDirection)
     {
         $this->order = array(
@@ -98,7 +98,7 @@ class Query
     /**
      * Sets the page size.
      *
-     **/
+     */
     public function pageSize($pageSize)
     {
         $this->pageSize = $pageSize;
@@ -110,7 +110,7 @@ class Query
      * Total amount of objects matched by the current query, reading this
      * may cause a remote request.
      *
-     **/
+     */
     public function count()
     {
         if ($this->countCached === null) {
@@ -127,7 +127,7 @@ class Query
      * Total number of pages required for all objects based on current pagesize,
      * reading this may cause a remote request.
      *
-     **/
+     */
     public function totalPages()
     {
         return ceil($this->count() / $this->pageSize);
@@ -136,7 +136,7 @@ class Query
     /**
      * Sets up filtering rules for the query.
      *
-     **/
+     */
     public function makeFilter(
         $filterType = null,
         $filterField = null,
@@ -159,7 +159,7 @@ class Query
     /**
      * Removes any previous filtering rules.
      *
-     **/
+     */
     public function removeFilter()
     {
         $this->filter = array();
@@ -170,7 +170,7 @@ class Query
     /**
      * Filter by a specific field and an exact value.
      *
-     **/
+     */
     public function filterField($filterField, $filterValue)
     {
         return $this->makeFilter('field', $filterField, $filterValue);
@@ -179,7 +179,7 @@ class Query
     /**
      * Filter by a specific field and looks for prefix matches.
      *
-     **/
+     */
     public function filterPrefix($filterField, $filterValue)
     {
         return $this->makeFilter('field-prefix', $filterField, $filterValue);
@@ -188,7 +188,7 @@ class Query
     /**
      * Filter by a specific field and looks for substring matches.
      *
-     **/
+     */
     public function filterSearch($filterField, $filterValue)
     {
         return $this->makeFilter('field-search', $filterField, $filterValue);
@@ -197,7 +197,7 @@ class Query
     /**
      * Filter on a special query.
      *
-     **/
+     */
     public function filterSpecial($filterField, $filterValue)
     {
         return $this->makeFilter('special', $filterField, $filterValue);
@@ -206,7 +206,7 @@ class Query
     /**
      * Filter by a full data search (exact meaning depends on object type).
      *
-     **/
+     */
     public function search($searchTerms)
     {
         return $this->makeFilter('special', 'search', $searchTerms);
@@ -215,7 +215,7 @@ class Query
     /**
      * Fetch objects for the one-based page number.
      *
-     **/
+     */
     public function getPage($pageNumber)
     {
         $response = $this->makeQuery($pageNumber);
