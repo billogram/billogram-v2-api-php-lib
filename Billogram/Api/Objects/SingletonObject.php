@@ -56,6 +56,8 @@ class SingletonObject
     /**
      * Constructor sets a url endpoint for the resource
      *
+     * @param $api
+     * @param $urlName
      */
     public function __construct($api, $urlName)
     {
@@ -66,6 +68,7 @@ class SingletonObject
     /**
      * String representation of the object
      *
+     * @return string
      */
     public function __toString()
     {
@@ -75,6 +78,7 @@ class SingletonObject
     /**
      * Returns the API url where you can receive this object.
      *
+     * @return null|string
      */
     public function url()
     {
@@ -88,6 +92,7 @@ class SingletonObject
     /**
      * Makes a GET request and refreshes the local data with up-to-date info.
      *
+     * @return $this
      */
     public function refresh()
     {
@@ -100,6 +105,8 @@ class SingletonObject
     /**
      * Updates the API object with $data.
      *
+     * @param $data
+     * @return $this
      */
     public function update($data)
     {
@@ -112,6 +119,9 @@ class SingletonObject
     /**
      * Wrapper method to easier access the specific parameters
      *
+     * @param $key
+     * @return null
+     * @throws \Billogram\Api\Exceptions\UnknownFieldError
      */
     public function __get($key)
     {

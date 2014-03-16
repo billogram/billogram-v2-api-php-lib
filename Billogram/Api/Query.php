@@ -55,6 +55,8 @@ class Query
      * Initiated with the Billogram API object and the parent model as
      * $typeClass.
      *
+     * @param $api
+     * @param $typeClass
      */
     public function __construct($api, $typeClass)
     {
@@ -66,6 +68,8 @@ class Query
      * Makes a GET request to the API with parameters for page size,
      * page number, filtering and order values. Returns the API response.
      *
+     * @param int $pageNumber
+     * @return mixed
      */
     private function makeQuery($pageNumber = 1)
     {
@@ -84,6 +88,9 @@ class Query
     /**
      * Sets which field to order on. $orderDirection can be 'asc' or 'desc'.
      *
+     * @param $orderField
+     * @param $orderDirection
+     * @return $this
      */
     public function order($orderField, $orderDirection)
     {
@@ -98,6 +105,8 @@ class Query
     /**
      * Sets the page size.
      *
+     * @param $pageSize
+     * @return $this
      */
     public function pageSize($pageSize)
     {
@@ -110,6 +119,7 @@ class Query
      * Total amount of objects matched by the current query, reading this
      * may cause a remote request.
      *
+     * @return null
      */
     public function count()
     {
@@ -127,6 +137,7 @@ class Query
      * Total number of pages required for all objects based on current pagesize,
      * reading this may cause a remote request.
      *
+     * @return float
      */
     public function totalPages()
     {
@@ -136,6 +147,10 @@ class Query
     /**
      * Sets up filtering rules for the query.
      *
+     * @param null $filterType
+     * @param null $filterField
+     * @param null $filterValue
+     * @return $this
      */
     public function makeFilter(
         $filterType = null,
@@ -159,6 +174,7 @@ class Query
     /**
      * Removes any previous filtering rules.
      *
+     * @return $this
      */
     public function removeFilter()
     {
@@ -170,6 +186,9 @@ class Query
     /**
      * Filter by a specific field and an exact value.
      *
+     * @param $filterField
+     * @param $filterValue
+     * @return $this
      */
     public function filterField($filterField, $filterValue)
     {
@@ -179,6 +198,9 @@ class Query
     /**
      * Filter by a specific field and looks for prefix matches.
      *
+     * @param $filterField
+     * @param $filterValue
+     * @return $this
      */
     public function filterPrefix($filterField, $filterValue)
     {
@@ -188,6 +210,9 @@ class Query
     /**
      * Filter by a specific field and looks for substring matches.
      *
+     * @param $filterField
+     * @param $filterValue
+     * @return $this
      */
     public function filterSearch($filterField, $filterValue)
     {
@@ -197,6 +222,9 @@ class Query
     /**
      * Filter on a special query.
      *
+     * @param $filterField
+     * @param $filterValue
+     * @return $this
      */
     public function filterSpecial($filterField, $filterValue)
     {
@@ -206,6 +234,8 @@ class Query
     /**
      * Filter by a full data search (exact meaning depends on object type).
      *
+     * @param $searchTerms
+     * @return $this
      */
     public function search($searchTerms)
     {
@@ -215,6 +245,8 @@ class Query
     /**
      * Fetch objects for the one-based page number.
      *
+     * @param $pageNumber
+     * @return array
      */
     public function getPage($pageNumber)
     {

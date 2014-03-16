@@ -44,6 +44,9 @@ class BillogramObject extends SimpleObject
     /**
      * Makes a POST request to /billogram/{id}/command/{event}.
      *
+     * @param $eventName
+     * @param null $eventData
+     * @return $this
      */
     public function performEvent($eventName, $eventData = null)
     {
@@ -57,6 +60,8 @@ class BillogramObject extends SimpleObject
     /**
      * Stores a manual payment for the billogram.
      *
+     * @param $amount
+     * @return $this
      */
     public function createPayment($amount)
     {
@@ -66,6 +71,9 @@ class BillogramObject extends SimpleObject
     /**
      * Creates a credit invoice for the specific amount.
      *
+     * @param $amount
+     * @return $this
+     * @throws \Billogram\Api\Exceptions\InvalidFieldValueError
      */
     public function creditAmount($amount)
     {
@@ -85,6 +93,7 @@ class BillogramObject extends SimpleObject
     /**
      * Creates a credit invoice for the full total amount of the billogram.
      *
+     * @return $this
      */
     public function creditFull()
     {
@@ -94,6 +103,7 @@ class BillogramObject extends SimpleObject
     /**
      * Creates a credit invoice for the remaining amount of the billogram.
      *
+     * @return $this
      */
     public function creditRemaining()
     {
@@ -103,6 +113,8 @@ class BillogramObject extends SimpleObject
     /**
      * Writes a comment/message at the billogram.
      *
+     * @param $message
+     * @return $this
      */
     public function sendMessage($message)
     {
@@ -112,6 +124,7 @@ class BillogramObject extends SimpleObject
     /**
      * Sends the billogram for collection. Requires a collectors-agreement.
      *
+     * @return $this
      */
     public function sendToCollector()
     {
@@ -122,6 +135,7 @@ class BillogramObject extends SimpleObject
      * Sends to billogram to factoring (sell the billogram). Requires a
      * factoring-agreement.
      *
+     * @return $this
      */
     public function sendToFactoring()
     {
@@ -131,6 +145,9 @@ class BillogramObject extends SimpleObject
     /**
      * Manually send a reminder if the billogram is overdue.
      *
+     * @param null $method
+     * @return $this
+     * @throws \Billogram\Api\Exceptions\InvalidFieldValueError
      */
     public function sendReminder($method = null)
     {
@@ -146,8 +163,11 @@ class BillogramObject extends SimpleObject
     }
 
     /**
-     * Send an unsent billogram using the method of choice.
+     * Send an unsent billogram using the method of choice
      *
+     * @param $method
+     * @return $this
+     * @throws \Billogram\Api\Exceptions\InvalidFieldValueError
      */
     public function send($method)
     {
@@ -161,6 +181,9 @@ class BillogramObject extends SimpleObject
     /**
      * Resend a billogram via Email or Letter.
      *
+     * @param null $method
+     * @return $this
+     * @throws \Billogram\Api\Exceptions\InvalidFieldValueError
      */
     public function resend($method = null)
     {
@@ -180,6 +203,9 @@ class BillogramObject extends SimpleObject
      * or letter document. Will throw a ObjectNotFoundError with message
      * 'Object not available yet' if the PDF has not yet been generated.
      *
+     * @param null $letterId
+     * @param null $invoiceNo
+     * @return string
      * @throws \Billogram\Api\Exceptions\ObjectNotFoundError
      */
     public function getInvoicePdf($letterId = null, $invoiceNo = null)
@@ -202,6 +228,7 @@ class BillogramObject extends SimpleObject
     /**
      * Returns the PDF-file content for the billogram's attachment.
      *
+     * @return string
      */
     public function getAttachmentPdf()
     {
@@ -217,6 +244,8 @@ class BillogramObject extends SimpleObject
     /**
      * Attach a PDF to the billogram.
      *
+     * @param $filepath
+     * @return $this
      */
     public function attachPdf($filepath)
     {
