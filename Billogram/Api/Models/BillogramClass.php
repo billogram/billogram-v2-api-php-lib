@@ -56,8 +56,9 @@ class BillogramClass extends SimpleClass
     /**
      * Makes a POST request to the API and creates a new object.
      *
+     * @param $data
      * @return \Billogram\Api\Objects\BillogramObject
-     **/
+     */
     public function create($data)
     {
         return parent::create($data);
@@ -66,8 +67,11 @@ class BillogramClass extends SimpleClass
     /**
      * Creates and sends a billogram using the $data and $method supplied.
      *
+     * @param $data
+     * @param $method
+     * @throws \Billogram\Api\Exceptions\InvalidFieldValueError
      * @return \Billogram\Api\Objects\BillogramObject
-     **/
+     */
     public function createAndSend($data, $method)
     {
         if (!in_array($method, array('Email', 'Letter', 'Email+Letter')))
@@ -86,8 +90,10 @@ class BillogramClass extends SimpleClass
     /**
      * Creates and sells a billogram.
      *
+     * @param $data
+     * @param $method
      * @return \Billogram\Api\Objects\BillogramObject
-     **/
+     */
     public function createAndSell($data, $method)
     {
         $data['_event'] = 'sell';

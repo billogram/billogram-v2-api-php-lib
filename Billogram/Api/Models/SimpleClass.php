@@ -69,8 +69,9 @@ class SimpleClass
     /**
      * Finds an object by id $objectId and returns an object.
      *
+     * @param $objectId
      * @return \Billogram\Api\Objects\SimpleObject
-     **/
+     */
     public function get($objectId)
     {
         $response = $this->api->get($this->url($objectId));
@@ -82,8 +83,9 @@ class SimpleClass
     /**
      * Makes a POST request to the API and creates a new object.
      *
+     * @param $data
      * @return \Billogram\Api\Objects\SimpleObject
-     **/
+     */
     public function create($data)
     {
         $response = $this->api->post($this->url(), $data);
@@ -95,8 +97,9 @@ class SimpleClass
     /**
      * Formats and returns a URL to an object or object id.
      *
+     * @param null $object
      * @return string
-     **/
+     */
     public function url($object = null)
     {
         if (is_object($object)) {
