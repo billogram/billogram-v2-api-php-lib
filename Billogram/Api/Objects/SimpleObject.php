@@ -69,7 +69,7 @@ class SimpleObject extends SingletonObject
      */
     public function delete()
     {
-        $response = $this->api->delete($this->url());
+        $this->api->delete($this->url());
 
         return null;
     }
