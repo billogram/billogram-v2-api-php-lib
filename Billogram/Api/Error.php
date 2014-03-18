@@ -23,14 +23,14 @@
  * @package Billogram_Api
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  * @author Billogram AB
- **/
+ */
 
 namespace Billogram\Api;
 
 /**
  * Base class for errors from the Billogram API
  *
- **/
+ */
 class Error extends \Exception
 {
 

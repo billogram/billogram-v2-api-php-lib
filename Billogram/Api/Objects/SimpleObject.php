@@ -44,14 +44,17 @@ use Billogram\Api\Objects\SingletonObject;
  *
  * See the online documentation for the actual structure of remote objects.
  *
- **/
+ */
 class SimpleObject extends SingletonObject
 {
     /**
      * Constructor sets the parent object to use for the resource as well as
      * initial data.
      *
-     **/
+     * @param $api
+     * @param $objectClass
+     * @param $data
+     */
     public function __construct($api, $objectClass, $data)
     {
         $this->api = $api;
@@ -62,7 +65,8 @@ class SimpleObject extends SingletonObject
     /**
      * Makes a DELETE request to the API and removes the resource.
      *
-     **/
+     * @return null
+     */
     public function delete()
     {
         $response = $this->api->delete($this->url());

@@ -23,7 +23,7 @@
  * @package Billogram_Api
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  * @author Billogram AB
- **/
+ */
 
 namespace Billogram;
 
@@ -48,7 +48,7 @@ use Billogram\Api\Exceptions\RequestDataError;
  *
  * Objects of this class provide a call interface to the Billogram v2 HTTP API.
  *
- **/
+ */
 class Api
 {
     const API_URL_BASE = "https://billogram.com/api/v2";
@@ -73,7 +73,7 @@ class Api
      *
      * Pass the API authentication in the auth_user and auth_key parameters.
      * API accounts can only be created from the Billogram web interface.
-     **/
+     */
     public function __construct(
         $authUser,
         $authKey,
@@ -99,7 +99,7 @@ class Api
      * from the API and throws the appropriate exceptions or returns the
      * de-encoded data.
      *
-     **/
+     */
     private function checkApiResponse($response, $expectContentType = null)
     {
         if (!$response->ok || $expectContentType == null)
@@ -198,7 +198,7 @@ class Api
      * Opens a socket and makes a request to the url of choice. Returns an
      * object with statusCode, status, content and the received headers.
      *
-     **/
+     */
     private function httpRequest(
         $url,
         $request,
@@ -272,7 +272,7 @@ class Api
     /**
      * Returns an Authorization header to be used for the httpRequest method.
      *
-     **/
+     */
     private function authHeader()
     {
         $auth = base64_encode($this->authUser . ":" . $this->authKey);
@@ -284,7 +284,7 @@ class Api
      * Makes a GET request to an API object.
      * Used for receiving an existing object or a list of resources.
      *
-     **/
+     */
     public function get($objectUrl, $data = null, $expectContentType = null)
     {
         $url = $this->apiBase . '/' . $objectUrl;
@@ -299,7 +299,7 @@ class Api
      * Makes a POST request to an API object.
      * Used to create a new object.
      *
-     **/
+     */
     public function post($objectUrl, $data)
     {
         $url = $this->apiBase . '/' . $objectUrl;
@@ -321,7 +321,7 @@ class Api
      * Makes a PUT request to an API object.
      * Used for updating a single existing object.
      *
-     **/
+     */
     public function put($objectUrl, $data)
     {
         $url = $this->apiBase . '/' . $objectUrl;
@@ -343,7 +343,7 @@ class Api
      * Makes a DELETE request to an API object.
      * Used to delete a single existing object.
      *
-     **/
+     */
     public function delete($objectUrl)
     {
         $url = $this->apiBase . '/' . $objectUrl;
@@ -360,7 +360,8 @@ class Api
 
     /**
      * Provide access to the different resource models.
-     **/
+     *
+     */
     public function __get($key)
     {
         switch ($key) {

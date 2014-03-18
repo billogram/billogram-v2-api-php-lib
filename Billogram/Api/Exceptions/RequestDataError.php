@@ -23,7 +23,7 @@
  * @package Billogram_Api
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  * @author Billogram AB
- **/
+ */
 
 namespace Billogram\Api\Exceptions;
 
@@ -32,7 +32,7 @@ use Billogram\Api\Error;
 /**
  * Errors caused by bad data passed to request
  *
- **/
+ */
 class RequestDataError extends Error
 {
 

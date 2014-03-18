@@ -23,7 +23,7 @@
  * @package Billogram_Api
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  * @author Billogram AB
- **/
+ */
 
 namespace Billogram\Api\Models;
 
@@ -37,7 +37,7 @@ use Billogram\Api\Exceptions\InvalidFieldValueError;
  * specialized creation methods to create billogram objects and state transition them
  * immediately.
  *
- **/
+ */
 class BillogramClass extends SimpleClass
 {
     public $objectClass = 'Billogram\Api\Objects\BillogramObject';
@@ -45,7 +45,7 @@ class BillogramClass extends SimpleClass
     /**
      * Constructor sets the base url and significant id field for the resource.
      *
-     **/
+     */
     public function __construct($api)
     {
         $this->api = $api;
@@ -56,8 +56,9 @@ class BillogramClass extends SimpleClass
     /**
      * Makes a POST request to the API and creates a new object.
      *
+     * @param $data
      * @return \Billogram\Api\Objects\BillogramObject
-     **/
+     */
     public function create($data)
     {
         return parent::create($data);
@@ -66,8 +67,11 @@ class BillogramClass extends SimpleClass
     /**
      * Creates and sends a billogram using the $data and $method supplied.
      *
+     * @param $data
+     * @param $method
+     * @throws \Billogram\Api\Exceptions\InvalidFieldValueError
      * @return \Billogram\Api\Objects\BillogramObject
-     **/
+     */
     public function createAndSend($data, $method)
     {
         if (!in_array($method, array('Email', 'Letter', 'Email+Letter')))
@@ -86,8 +90,10 @@ class BillogramClass extends SimpleClass
     /**
      * Creates and sells a billogram.
      *
+     * @param $data
+     * @param $method
      * @return \Billogram\Api\Objects\BillogramObject
-     **/
+     */
     public function createAndSell($data, $method)
     {
         $data['_event'] = 'sell';
