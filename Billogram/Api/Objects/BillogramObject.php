@@ -254,4 +254,15 @@ class BillogramObject extends SimpleObject
 
         return $this->performEvent('attach', array('filename' => $filename, 'content' => base64_encode($content)));
     }
+
+    /**
+     * Write-off remaining fees from a billogram.
+     *
+     * @return $this
+     */
+    public function writeOff()
+    {
+        return $this->performEvent('writeoff');
+    }
+
 }
