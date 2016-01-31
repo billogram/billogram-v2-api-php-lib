@@ -42,6 +42,8 @@ use Billogram\Api\Exceptions\ReadOnlyFieldError;
 use Billogram\Api\Exceptions\UnknownFieldError;
 use Billogram\Api\Exceptions\InvalidObjectStateError;
 use Billogram\Api\Exceptions\RequestDataError;
+use Billogram\Api\Event\RequestEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Pseudo-connection to the Billogram v2 API
@@ -59,6 +61,11 @@ class Api
     private $apiBase;
     private $userAgent;
     private $extraHeaders;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
 
     private $itemsConnector;
     private $customersConnector;
@@ -79,7 +86,8 @@ class Api
         $authKey,
         $userAgent = self::USER_AGENT,
         $apiBase = self::API_URL_BASE,
-        $extraHeaders = array()
+        $extraHeaders = array(),
+        EventDispatcherInterface $eventDispatcher = null
     ) {
         $this->authUser = $authUser;
         $this->authKey = $authKey;
@@ -92,6 +100,8 @@ class Api
             $this->extraHeaders = array();
         else
             $this->extraHeaders = $extraHeaders;
+
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -258,6 +268,13 @@ class Api
                     $headers[mb_strtolower($m[1])] = $m[2];
                 }
             }
+        }
+
+        if ($this->eventDispatcher) {
+            $this->eventDispatcher->dispatch(
+                RequestEvent::REQUEST,
+                new RequestEvent($url, $statusCode, $status, $content, $headers)
+            );
         }
 
         return (object) array(
