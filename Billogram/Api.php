@@ -48,6 +48,13 @@ use Billogram\Api\Exceptions\RequestDataError;
  *
  * Objects of this class provide a call interface to the Billogram v2 HTTP API.
  *
+ * @property-read \Billogram\Api\Models\SimpleClass $items
+ * @property-read \Billogram\Api\Models\SimpleClass $customers
+ * @property-read \Billogram\Api\Models\BillogramClass $billogram
+ * @property-read \Billogram\Api\Objects\SingletonObject $settings
+ * @property-read \Billogram\Api\Objects\SingletonObject $logotype
+ * @property-read \Billogram\Api\Models\SimpleClass $reports
+ * @property-read \Billogram\Api\Models\SimpleClass $creditors
  */
 class Api
 {
