@@ -18,5 +18,8 @@
     },
     "autoload": {
         "psr-0": {"Billogram": ""}
+    },
+    "suggest": {
+        "symfony/event-dispatcher": "To dispatch an event when a request is processed"
     }
 }
