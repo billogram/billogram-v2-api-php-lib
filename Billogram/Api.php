@@ -42,6 +42,10 @@ use Billogram\Api\Exceptions\ReadOnlyFieldError;
 use Billogram\Api\Exceptions\UnknownFieldError;
 use Billogram\Api\Exceptions\InvalidObjectStateError;
 use Billogram\Api\Exceptions\RequestDataError;
+use Http\Client\HttpClient;
+use Http\Message\MessageFactory;
+use Http\Discovery\HttpClientDiscovery;
+use Http\Discovery\MessageFactoryDiscovery;
 
 /**
  * Pseudo-connection to the Billogram v2 API
@@ -66,6 +70,8 @@ class Api
     private $apiBase;
     private $userAgent;
     private $extraHeaders;
+    private $httpClient;
+    private $messageFactory;
 
     private $itemsConnector;
     private $customersConnector;
@@ -86,7 +92,9 @@ class Api
         $authKey,
         $userAgent = self::USER_AGENT,
         $apiBase = self::API_URL_BASE,
-        $extraHeaders = array()
+        $extraHeaders = array(),
+        HttpClient $httpClient = null,
+        MessageFactory $messageFactory = null
     ) {
         $this->authUser = $authUser;
         $this->authKey = $authKey;
@@ -99,6 +107,8 @@ class Api
             $this->extraHeaders = array();
         else
             $this->extraHeaders = $extraHeaders;
+        $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
+        $this->messageFactory = $messageFactory ?: MessageFactoryDiscovery::find();
     }
 
     /**

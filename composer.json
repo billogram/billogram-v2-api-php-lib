@@ -15,7 +15,9 @@
     ],
     "require": {
         "php": ">=5.3.0",
-        "php-http/client-implementation": "^1.0"
+        "php-http/client-implementation": "^1.0",
+        "php-http/message-factory": "^1.0",
+        "php-http/discovery": "^0.8"
     },
     "autoload": {
         "psr-0": {"Billogram": ""}
