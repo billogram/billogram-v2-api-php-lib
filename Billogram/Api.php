@@ -42,6 +42,10 @@ use Billogram\Api\Exceptions\ReadOnlyFieldError;
 use Billogram\Api\Exceptions\UnknownFieldError;
 use Billogram\Api\Exceptions\InvalidObjectStateError;
 use Billogram\Api\Exceptions\RequestDataError;
+use Http\Client\HttpClient;
+use Http\Message\MessageFactory;
+use Http\Discovery\HttpClientDiscovery;
+use Http\Discovery\MessageFactoryDiscovery;
 
 /**
  * Pseudo-connection to the Billogram v2 API
@@ -66,6 +70,8 @@ class Api
     private $apiBase;
     private $userAgent;
     private $extraHeaders;
+    private $httpClient;
+    private $messageFactory;
 
     private $itemsConnector;
     private $customersConnector;
@@ -86,7 +92,9 @@ class Api
         $authKey,
         $userAgent = self::USER_AGENT,
         $apiBase = self::API_URL_BASE,
-        $extraHeaders = array()
+        $extraHeaders = array(),
+        HttpClient $httpClient = null,
+        MessageFactory $messageFactory = null
     ) {
         $this->authUser = $authUser;
         $this->authKey = $authKey;
@@ -99,6 +107,8 @@ class Api
             $this->extraHeaders = array();
         else
             $this->extraHeaders = $extraHeaders;
+        $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
+        $this->messageFactory = $messageFactory ?: MessageFactoryDiscovery::find();
     }
 
     /**
@@ -109,13 +119,19 @@ class Api
      */
     private function checkApiResponse($response, $expectContentType = null)
     {
-        if (!$response->ok || $expectContentType == null)
+        if ($response->getStatusCode() !== 200 || $expectContentType == null) {
             $expectContentType = 'application/json';
+        }
 
-        if ($response->statusCode >= 500 && $response->statusCode <= 600) {
-            if ($response->headers['content-type'] == $expectContentType &&
+        if (!$response->hasHeader('Content-Type')) {
+            throw new ServiceMalfunctioningError('Billogram API did not ' .
+                    'return a content type');
+        }
+
+        if ($response->getStatusCode() >= 500 && $response->getStatusCode() <= 600) {
+            if ($response->getHeader('Content-Type') == $expectContentType &&
                 $expectContentType == 'application/json') {
-                $data = json_decode($response->content);
+                $data = json_decode((string)$response->getBody());
                 throw new ServiceMalfunctioningError('Billogram API reported ' .
                     'a server error: ' . $data->status . ' - ' .
                     $data->data->message);
@@ -124,15 +140,15 @@ class Api
                 'server error');
         }
 
-        if ($response->statusCode == 401) {
+        if ($response->getStatusCode() == 401) {
             throw new InvalidAuthenticationError('The user/key ' .
                 'combination is wrong, check the credentials used and ' .
                 'possibly generate a new set');
         }
 
-        if ($response->headers['content-type'] != $expectContentType) {
-            if ($response->headers['content-type'] == 'application/json') {
-                $data = json_decode($response->content);
+        if ($response->getHeader('Content-Type') != $expectContentType) {
+            if ($response->getHeader('Content-Type') == 'application/json') {
+                $data = json_decode((string)$response->getBody());
                 if ($data->status == 'NOT_AVAILABLE_YET')
                     throw new ObjectNotFoundError('Object not available yet');
                 throw new ServiceMalfunctioningError('Billogram API returned ' .
@@ -141,7 +157,7 @@ class Api
         }
 
         if ($expectContentType == 'application/json') {
-            $data = json_decode($response->content);
+            $data = json_decode((string)$response->getBody());
             $status = $data->status;
             if (!$status)
                 throw new ServiceMalfunctioningError('Response data missing ' .
@@ -150,10 +166,10 @@ class Api
                 throw new ServiceMalfunctioningError('Response data missing ' .
                     'data field');
         } else {
-            return $response->content;
+            return (string)$response->getBody();
         }
 
-        if ($response->statusCode == 403) {
+        if ($response->getStatusCode() == 403) {
             if ($status == 'PERMISSION_DENIED')
                 throw new NotAuthorizedError('Not allowed to perform the ' .
                     'requested operation');
@@ -168,13 +184,13 @@ class Api
                     $status);
         }
 
-        if ($response->statusCode == 404) {
+        if ($response->getStatusCode() == 404) {
             if ($status == 'NOT_AVAILABLE_YET')
                 throw new ObjectNotFoundError('Object not available yet');
             throw new ObjectNotFoundError('Object not found');
         }
 
-        if ($response->statusCode == 405) {
+        if ($response->getStatusCode() == 405) {
             throw new RequestFormError('Invalid HTTP method');
         }
 
@@ -208,72 +224,24 @@ class Api
      */
     private function httpRequest(
         $url,
-        $request,
-        $data = array(),
+        $method,
+        $body = array(),
         $sendHeaders = array(),
         $timeout = 10
     ) {
-        $streamParams = array(
-            'http' => array(
-                'method' => $request,
-                'ignore_errors' => true,
-                'timeout' => $timeout,
-                'header' => "User-Agent: " . $this->userAgent . "\r\n"
-            )
-        );
-        foreach ($sendHeaders as $header => $value) {
-            $streamParams['http']['header'] .= $header . ': ' . $value . "\r\n";
-        }
-        foreach ($this->extraHeaders as $header => $value) {
-            $streamParams['http']['header'] .= $header . ': ' . $value . "\r\n";
-        }
-
-        if (is_array($data)) {
-            if (in_array($request, array('POST', 'PUT')))
-                $streamParams['http']['content'] = http_build_query($data);
-            elseif ($data && count($data))
-                $url .= '?' . http_build_query($data);
-        } elseif ($data !== null) {
-            if (in_array($request, array('POST', 'PUT')))
-                $streamParams['http']['content'] = $data;
-        }
-
-        $streamParams['cURL'] = $streamParams['http'];
-
-        $context = stream_context_create($streamParams);
-        $fp = @fopen($url, 'rb', false, $context);
-        if (!$fp)
-            $content = false;
-        else
-            $content = stream_get_contents($fp);
-
-        $status = null;
-        $statusCode = null;
-        $headers = array();
-
-        if ($content !== false) {
-            $metadata = stream_get_meta_data($fp);
-            if (isset($metadata['wrapper_data']['headers']))
-                $headerMetadata = $metadata['wrapper_data']['headers'];
-            else
-                $headerMetadata = $metadata['wrapper_data'];
-            foreach ($headerMetadata as $row) {
-                if (preg_match('/^HTTP\/1\.[01] (\d{3})\s*(.*)/', $row, $m)) {
-                    $statusCode = $m[1];
-                    $status = $m[2];
-                } elseif (preg_match('/^([^:]+):\s*(.*)$/', $row, $m)) {
-                    $headers[mb_strtolower($m[1])] = $m[2];
-                }
+        if (is_array($body)) {
+            if (in_array($method, array('POST', 'PUT'))) {
+                $body = http_build_query($body);
+            } elseif ($body && count($body)) {
+                $url .= '?' . http_build_query($body);
+                $body = null;
             }
         }
 
-        return (object) array(
-            'ok' => $statusCode == 200,
-            'statusCode' => $statusCode,
-            'status' => $status,
-            'content' => $content,
-            'headers' => $headers
-        );
+        $request = $this->messageFactory->createRequest($method, $url, $sendHeaders, $body);
+        $response = $this->httpClient->sendRequest($request);
+
+        return $response;
     }
 
     /**
