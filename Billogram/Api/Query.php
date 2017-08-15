@@ -44,12 +44,12 @@ namespace Billogram\Api;
  */
 class Query
 {
-    private $typeClass;
-    private $filter = array();
-    private $countCached = null;
-    private $pageSize = 100;
-    private $order = array();
-    private $api;
+    protected $typeClass;
+    protected $filter = array();
+    protected $countCached = null;
+    protected $pageSize = 100;
+    protected $order = array();
+    protected $api;
 
     /**
      * Initiated with the Billogram API object and the parent model as
@@ -71,7 +71,7 @@ class Query
      * @param int $pageNumber
      * @return mixed
      */
-    private function makeQuery($pageNumber = 1)
+    protected function makeQuery($pageNumber = 1)
     {
         $params = array(
             'page_size' => $this->pageSize,
