@@ -211,7 +211,7 @@ class Api
         $request,
         $data = array(),
         $sendHeaders = array(),
-        $timeout = 10
+        $timeout = 30
     ) {
         $streamParams = array(
             'http' => array(
