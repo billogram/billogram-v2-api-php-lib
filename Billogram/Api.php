@@ -61,19 +61,19 @@ class Api
     const API_URL_BASE = "https://billogram.com/api/v2";
     const USER_AGENT = "Billogram API PHP Library/1.11";
 
-    private $authUser;
-    private $authKey;
-    private $apiBase;
-    private $userAgent;
-    private $extraHeaders;
+    protected $authUser;
+    protected $authKey;
+    protected $apiBase;
+    protected $userAgent;
+    protected $extraHeaders;
 
-    private $itemsConnector;
-    private $customersConnector;
-    private $billogramConnector;
-    private $settingsConnector;
-    private $logotypeConnector;
-    private $reportsConnector;
-    private $creditorsConnector;
+    protected $itemsConnector;
+    protected $customersConnector;
+    protected $billogramConnector;
+    protected $settingsConnector;
+    protected $logotypeConnector;
+    protected $reportsConnector;
+    protected $creditorsConnector;
 
     /**
      * Create a Billogram API connection object
@@ -107,7 +107,7 @@ class Api
      * de-encoded data.
      *
      */
-    private function checkApiResponse($response, $expectContentType = null)
+    protected function checkApiResponse($response, $expectContentType = null)
     {
         if (!$response->ok || $expectContentType == null)
             $expectContentType = 'application/json';
@@ -206,7 +206,7 @@ class Api
      * object with statusCode, status, content and the received headers.
      *
      */
-    private function httpRequest(
+    protected function httpRequest(
         $url,
         $request,
         $data = array(),
@@ -280,7 +280,7 @@ class Api
      * Returns an Authorization header to be used for the httpRequest method.
      *
      */
-    private function authHeader()
+    protected function authHeader()
     {
         $auth = base64_encode($this->authUser . ":" . $this->authKey);
 
